@@ -2,12 +2,11 @@
 
 namespace App\Http\Requests;
 
-use App\Http\Controllers\Api\v1\TasksApiController;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class StoreTaskRequest extends FormRequest
+class StoreUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,10 +26,9 @@ class StoreTaskRequest extends FormRequest
     public function rules()
     {
         return [
-            'title'   => 'required',
-            'body'    => 'required',
-            'status'  => 'required|in:' . implode(',', TasksApiController::STATUS),
-            'user_id' => 'required|exists:users,id'
+            'name'     => 'required',
+            'email'    => 'required',
+            'password' => 'required',
         ];
     }
 
@@ -41,11 +39,9 @@ class StoreTaskRequest extends FormRequest
     public function messages()
     {
         return [
-            'title.required'   => 'A title is required',
-            'body.required'    => 'A body is required',
-            'status.required'  => 'A status is required',
-            'user_id.required' => 'A user_id is required',
-            'user_id.exists'   => 'A user not exists'
+            'name.required'     => 'A name is required',
+            'email.required'    => 'A email is required',
+            'password.required' => 'A password is required',
         ];
     }
 

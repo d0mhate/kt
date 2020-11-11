@@ -3,20 +3,31 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SearchTaskRequest;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Http\Resources\TaskResource;
+use App\Repositories\Interfaces\TaskRepositoryInterface;
 use App\Task;
-use App\User;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Validator;
 
 class TasksApiController extends Controller
 {
-    const STATUS = ['finished', 'progress', 'terminated'];
+    public const STATUS = ['finished', 'progress', 'terminated'];
+
+    /**
+     * @var TaskRepositoryInterface
+     */
+    protected $taskRepository;
+
+    public function __construct(TaskRepositoryInterface $taskRepository)
+    {
+        $this->taskRepository = $taskRepository;
+    }
 
     /**
      * Display a listing of the resource.
@@ -25,7 +36,7 @@ class TasksApiController extends Controller
      */
     public function index()
     {
-        return new TaskResource(Task::all());
+        return new TaskResource($this->taskRepository->allWithQuery()->paginate(100));
     }
 
     /**
@@ -79,32 +90,5 @@ class TasksApiController extends Controller
     {
         $task->delete();
         return new TaskResource($task);
-    }
-
-    /**
-     * Проверка валидации
-     * При неудавшейся валидации выбрасывает исключение
-     * @param \Illuminate\Contracts\Validation\Validator $validator
-     * @throws Exception
-     */
-    protected function checkValidationFails(\Illuminate\Contracts\Validation\Validator $validator): void
-    {
-        if ($validator->fails()) {
-            $errors = implode("\n ", $validator->errors()->all());
-            $this->sendResponse($validator->errors()->all(), 404);
-            throw new Exception($errors, 400);
-        }
-    }
-
-    /**
-     * Отпавка ответа
-     * @param array | Collection $data
-     * @param int $code
-     * @return null
-     */
-    protected function sendResponse($data, int $code = 200)
-    {
-        $this->response->json($data, $code, ['Content-Type' => 'application/json'])->send();
-        return null;
     }
 }

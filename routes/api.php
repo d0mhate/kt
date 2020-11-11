@@ -13,9 +13,12 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::middleware('auth:api')->get(
+    '/user',
+    function (Request $request) {
+        return $request->user();
+    }
+);
 
 //Route::group([
 //    'prefix' => 'v1',
@@ -29,14 +32,24 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 //    });
 //});
 
-Route::group([
-    'namespace' => 'Api\v1'
-], function(){
-    //register
-    Route::post('register', 'UsersApiController@register');
-    Route::group([
-        'middleware' => ['auth:api']
-    ],function(){
-        Route::apiResource('/task', 'TasksApiController');
-    });
-});
+Route::group(
+    [
+        'namespace' => 'Api\v1'
+    ],
+    function () {
+        //register
+        Route::post('register', 'UsersApiController@store');
+
+        Route::group(
+            [
+                'middleware' => ['auth:api']
+            ],
+            function () {
+                Route::post('/task/filter', 'SearchApiController@taskFilter');
+                Route::post('/user/filter', 'SearchApiController@userFilter');
+                Route::apiResource('/task', 'TasksApiController');
+                Route::apiResource('/user', 'UsersApiController');
+            }
+        );
+    }
+);
