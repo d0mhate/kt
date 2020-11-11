@@ -30,7 +30,7 @@ class UpdateTaskRequest extends FormRequest
             'title'   => 'required',
             'body'    => 'required',
             'status'  => 'required|in:' . implode(',', TasksApiController::STATUS),
-            'user_id' => 'required:exists:users'
+            'user_id' => 'required|exists:users,id'
         ];
     }
 
@@ -45,6 +45,7 @@ class UpdateTaskRequest extends FormRequest
             'body.required'    => 'A body is required',
             'status.required'  => 'A status is required',
             'user_id.required' => 'A status is required',
+            'user_id.exists' => 'A user not exists'
         ];
     }
 
