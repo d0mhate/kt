@@ -27,7 +27,7 @@ class UpdateTaskRequest extends FormRequest
     public function rules()
     {
         return [
-            'title'   => 'required',
+            'title'   => 'required|unique',
             'body'    => 'required',
             'status'  => 'required|in:' . implode(',', TasksApiController::STATUS),
             'user_id' => 'required|exists:users,id'
