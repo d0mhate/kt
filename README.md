@@ -6,6 +6,7 @@
 <p>2. В папке клонированного проекта выполнить:</p>
 <p>2.1 composer install || php artisan composer.phar install</p>
 <p>2.2 Указать наименование бд и пароль от нее в файле .env</p>
+<p>2.3 sudo chmod -R 777 storage/</p>
 <p>
 DB_DATABASE=laravel
 DB_USERNAME=root
