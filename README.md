@@ -4,6 +4,7 @@
 <p>2. В папке клонированного проекта выполнить:</p>
 <p>2.1 composer install || php artisan composer.phar install</p>
 <p>2.2 php artisan migrate</p>
+<p>2.3 php artisan passport:install</p>
 <h2>Postman, env, collections</h2>
 <p>URL:https://documenter.getpostman.com/view/5514548/TVemB9WM</p>
 <h2>Человеко-часы</h2>
